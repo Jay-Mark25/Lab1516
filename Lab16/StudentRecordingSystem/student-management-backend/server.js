@@ -1,23 +1,20 @@
 const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const studentRoutes = require("./routes/students");
 const mysql = require("mysql");
+const cors = require("cors");
 
 const app = express();
 
+// Middleware
 app.use(cors());
-app.use(bodyParser.json());
-app.use("/api/students", studentRoutes);
+app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+// MySQL database connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
     password: "",
     database: "SchoolDB",
+    // port: 3306 // Uncomment if using a custom MySQL port
 });
 
 db.connect(err => {
@@ -28,12 +25,16 @@ db.connect(err => {
     console.log("✅ Connected to MySQL database.");
 });
 
+// Simple test route
 app.get("/", (req, res) => {
     res.send("🎉 API is running...");
 });
 
+// Add student route
 app.post("/add", (req, res) => {
     const { name, math, science, english } = req.body;
+
+    // Validate inputs
     if (!name || math == null || science == null || english == null) {
         return res.status(400).json({ error: "All fields (name, math, science, english) are required." });
     }
@@ -58,4 +59,10 @@ app.post("/add", (req, res) => {
         }
         res.status(200).json({ message: "✅ Student added successfully!" });
     });
+});
+
+// Server listening
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`🚀 Server is running on port ${PORT}`);
 });
