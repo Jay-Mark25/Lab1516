@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import StudentForm from "./components/StudentForm";
 import StudentList from "./components/StudentList";
+import "./App.css";
 
 const App = () => {
     const [students, setStudents] = useState([]);
@@ -20,10 +21,16 @@ const App = () => {
     }, []);
 
     return (
-        <div className="container">
-            <h1>Student Recording System</h1>
-            <StudentForm fetchStudents={fetchStudents} />
-            <StudentList students={students} fetchStudents={fetchStudents} />
+        <div className="App">
+            <video autoPlay loop muted className="background-video">
+                <source src={`${process.env.PUBLIC_URL}/background.mp4`} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+            <div className="content-box">
+                <h1>Student Recording System</h1>
+                <StudentForm fetchStudents={fetchStudents} />
+                <StudentList students={students} fetchStudents={fetchStudents} />
+            </div>
         </div>
     );
 };
